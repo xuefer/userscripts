@@ -2,9 +2,9 @@
 // @name         bangumi enhancement
 // @name:zh-CN   Bangumi 番组计划 - 排序
 // @namespace    http://xuefer.win/
-// @version      0.1
-// @description  sort items in alphabet order so you won't confuse any more
-// @description:zh-CN 按字母顺序排序观看中的节目单, 不再晕菜了
+// @version      0.2
+// @description  sort items in alphabet order so you won't confuse any more, recommended https://userstyles.org/styles/171437/bangumi-enhancement
+// @description:zh-CN 按字母顺序排序观看中的节目单, 不再晕菜了, 推荐 https://userstyles.org/styles/171437/bangumi-enhancement
 // @author       Xuefer
 // @include      http://bangumi.tv/
 // @include      http://bgm.tv/
@@ -78,6 +78,7 @@ function changeLayout() {
 		for (let i = 0; i < 8; ++i) {
 			let day = container.appendChild(document.createElement("div"));
 			day.className = "day";
+			day.style.overflow = "auto";
 			let caption = day.appendChild(document.createElement("div"));
 			caption.appendChild(document.createTextNode("周" + weekdayLabels[i]));
 			day.subjects = day.appendChild(document.createElement("div"));
