@@ -1,38 +1,42 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name         bangumi ep linker
 // @name:zh-CN   Bangumi ep linker
 // @namespace    http://xuefer.win/
-// @version      0.1
+// @version      0.2
 // @description  "link episode to torrent web"
 // @description:zh-CN "链接每集到 BT 下载网站"
 // @author       Xuefer
 // @include      http://bangumi.tv/ep/*
+// @include      https://bangumi.tv/ep/*
 // @include      http://bgm.tv/ep/*
+// @include      https://bgm.tv/ep/*
 // @include      http://chii.in/ep/*
+// @include      https://chii.in/ep/*
 // @run-at       document-start
 // ==/UserScript==
 
 String.prototype.trim = function() {
-    return this.replace(/^[ \t]+|[ \t]+$/g, "");
+	return this.replace(/^[ \t]+|[ \t]+$/g, "");
 };
 
 Number.prototype.zeroPad = function(length) {
-    var s = (this||"0").toString();
-    while (s.length < length) {
-        s = "0" + s;
-    }
-    return s;
+	var s = (this||"0").toString();
+	while (s.length < length) {
+		s = "0" + s;
+	}
+	return s;
 };
 
 
 function changeLayout() {
-    // wait for element to finish
-    if (!unsafeWindow.$ || !document.getElementById("columnEpB")) {
-        setTimeout(changeLayout, 1);
-        return;
-    }
-    console.log("Changing layout");
-    var $ = unsafeWindow.$;
+	// wait for element to finish
+	var unsafeWindow = self.unsafeWindow||window;
+	if (!unsafeWindow.$ || !document.getElementById("columnEpB")) {
+		setTimeout(changeLayout, 1);
+		return;
+	}
+	console.log("Changing layout");
+	var $ = unsafeWindow.$;
 
 	var ep = (function() {
 		var ep = $("#columnEpA h2.title").text();

@@ -2,64 +2,68 @@
 // @name         bangumi enhancement
 // @name:zh-CN   Bangumi 番组计划 - 排序
 // @namespace    http://xuefer.win/
-// @version      0.2
-// @description  sort items in alphabet order so you won't confuse any more, recommended https://userstyles.org/styles/171437/bangumi-enhancement
-// @description:zh-CN 按字母顺序排序观看中的节目单, 不再晕菜了, 推荐 https://userstyles.org/styles/171437/bangumi-enhancement
+// @version      0.3
+// @description  group items by day
+// @description:zh-CN 按星期顺序分组，高亮显示当前日期
 // @author       Xuefer
 // @include      http://bangumi.tv/
+// @include      https://bangumi.tv/
 // @include      http://bgm.tv/
+// @include      https://bgm.tv/
 // @include      http://chii.in/
+// @include      https://chii.in/
 // @run-at       document-start
 // ==/UserScript==
 
 function sortElements(childs, compareFunction) {
-    if (!childs.length) {
-        return;
-    }
-    var parent = childs[0].parentNode;
+	if (!childs.length) {
+		return;
+	}
+	var parent = childs[0].parentNode;
 	var sorting = [];
-    for (var i = childs.length - 1; i >= 0; --i) {
+	for (var i = childs.length - 1; i >= 0; --i) {
 		sorting.push(childs[i]);
-        parent.removeChild(childs[i]);
-    }
-    sorting.sort(compareFunction);
-    for (let child of sorting) {
-        parent.appendChild(child);
-    }
+		parent.removeChild(childs[i]);
+	}
+	sorting.sort(compareFunction);
+	for (let child of sorting) {
+		parent.appendChild(child);
+	}
 }
 
 Number.prototype.zeroPad = function(length) {
-    var s = (this||"0").toString();
-    while (s.length < length) {
-        s = "0" + s;
-    }
-    return s;
+	var s = (this||"0").toString();
+	while (s.length < length) {
+		s = "0" + s;
+	}
+	return s;
 };
 
 String.prototype.trim = function() {
-    return this.replace(/^[ \t]+|[ \t]+$/g, "");
+	return this.replace(/^[ \t]+|[ \t]+$/g, "");
 };
 
 String.prototype.extractDate = function() {
-    return (this.match(/(20\d\d-\d{1,2}-\d{1,2})/)||[])[1] || NaN;
+	return (this.match(/(20\d\d-\d{1,2}-\d{1,2})/)||[])[1] || NaN;
 };
 
 String.prototype.getPrefix = function() {
-    return ((this.match(/^([^(:]*)/)||[])[1] || "").trim();
+	return ((this.match(/^([^(:]*)/)||[])[1] || "").trim();
 };
 
 function changeLayout() {
-    // wait for element to finish
-    if (!unsafeWindow.loadXML || !unsafeWindow.$ || !document.getElementById("subject_prg_content") || !document.getElementById("cluetip")) {
-        setTimeout(changeLayout, 1);
-        return;
-    }
+	// wait for element to finish
+	var unsafeWindow = self.unsafeWindow||window;
+	if (!unsafeWindow.loadXML || !unsafeWindow.$ || !document.getElementById("subject_prg_content") || !document.getElementById("cluetip")) {
+		setTimeout(changeLayout, 1);
+		return;
+	}
 	var weekdayLabels = [ '日', '一', '二', '三', '四', '五', '六', '??' ];
-    console.log("Changing layout");
-    var $ = unsafeWindow.$;
+	console.log("Changing layout");
+	var $ = unsafeWindow.$;
 
-    var now = new Date();
-    var oldDate = now.valueOf() - 365 * 24 * 60 * 60 * 1000;
+	var now = new Date();
+	var oldDate = now.valueOf() - 365 * 24 * 60 * 60 * 1000;
 
 	do {
 		let subjects = $("#cloumnSubjectInfo > div:first > div").toArray();
@@ -152,18 +156,18 @@ function changeLayout() {
 		});
 	}
 
-    var within_24hours = now.valueOf() - 60 * 60 * 24 * 1000;
-    var within_48hours = now.valueOf() - 60 * 60 * 48 * 1000;
-    $.each($(".epBtnAir"), function(i, o) {
-        var airDate = new Date($(".tip:first", $(o.rel)).text().extractDate()).valueOf();
-        if (isNaN(airDate)) {
-            $(o).removeClass("epBtnAir");
-            $(o).addClass("epBtnUnknown");
+	var within_24hours = now.valueOf() - 60 * 60 * 24 * 1000;
+	var within_48hours = now.valueOf() - 60 * 60 * 48 * 1000;
+	$.each($(".epBtnAir"), function(i, o) {
+		var airDate = new Date($(".tip:first", $(o.rel)).text().extractDate()).valueOf();
+		if (isNaN(airDate)) {
+			$(o).removeClass("epBtnAir");
+			$(o).addClass("epBtnUnknown");
 		}
 		else if (airDate >= within_48hours) {
-            $(o).addClass(airDate >= within_24hours ? "epBtnAirNewDay1" : "epBtnAirNewDay2");
-        }
-    });
+			$(o).addClass(airDate >= within_24hours ? "epBtnAirNewDay1" : "epBtnAirNewDay2");
+		}
+	});
 }
 
 changeLayout();
