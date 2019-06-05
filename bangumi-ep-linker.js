@@ -2,7 +2,7 @@
 // @name         bangumi ep linker
 // @name:zh-CN   Bangumi ep linker
 // @namespace    http://xuefer.win/
-// @version      0.3
+// @version      0.4
 // @description  "link episode to torrent web"
 // @description:zh-CN "链接每集到 BT 下载网站"
 // @author       Xuefer
@@ -68,7 +68,7 @@ function changeLayout() {
 	var links = {
 		'[TPB]': "https://thepiratebay.org/search/" + encodeURIComponent(keyword) + "/0/99/0",
 		'[RARBG]': "https://rarbg.to/torrents.php?order=seeders&by=DESC&search=" + encodeURIComponent(keyword),
-		'[1377x]': "https://www.1377x.to/search/" + encodeURIComponent(keyword) + "/seeders/desc/1/",
+		'[1377x]': "https://www.1377x.to/sort-search/" + encodeURIComponent(keyword) + "/seeders/desc/1/",
 		'[M-TEAM]': "https://tp.m-team.cc/torrents.php?search=" + encodeURIComponent(keyword) + "&sort=7&type=desc",
 	};
 
